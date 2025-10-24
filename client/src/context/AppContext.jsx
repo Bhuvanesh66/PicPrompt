@@ -1,17 +1,32 @@
 /**
  * Global Application Context
- * 
- * This context provides global state management for:
- * - User authentication state
- * - Theme preferences (dark/light mode)
- * - Credit system management
- * - API communication
- * 
- * The context includes functions for:
- * - User authentication
- * - Image generation
- * - Theme toggling
- * - Credit management
+ *
+ * This context provides global state management for the entire application.
+ *
+ * Features:
+ * - User authentication state management
+ * - Theme preferences (dark/light mode) with local storage persistence
+ * - Credit system management for image generation
+ * - API communication with backend services
+ * - JWT token management
+ *
+ * Key Functions:
+ * - User authentication (login/logout)
+ * - Image generation with credit validation
+ * - Theme toggling with system preference detection
+ * - Credit balance management and updates
+ * - Session persistence
+ *
+ * States Managed:
+ * - user: Current user details
+ * - showLogin: Login modal visibility
+ * - token: JWT authentication token
+ * - isDarkMode: Theme preference
+ * - credit: User's credit balance
+ *
+ * Usage:
+ * Wrap your app with AppContextProvider and use useContext(AppContext)
+ * to access the global state and functions in any component.
  */
 
 import React, { createContext, useEffect, useState } from "react";

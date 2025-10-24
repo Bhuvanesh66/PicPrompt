@@ -1,3 +1,27 @@
+/**
+ * Navigation Bar Component
+ *
+ * The main navigation component that appears on all pages.
+ * Features:
+ * - Responsive design with mobile menu
+ * - User authentication status display
+ * - Credit balance display
+ * - Profile dropdown with settings
+ * - Dynamic navigation links
+ * - Dark mode support
+ *
+ * State Management:
+ * - Tracks mobile menu state
+ * - Tracks profile dropdown state
+ * - Manages auth context
+ *
+ * Accessibility:
+ * - ARIA labels
+ * - Keyboard navigation
+ * - Focus management
+ * - Screen reader friendly
+ */
+
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { Link, useNavigate, useLocation } from "react-router-dom";
