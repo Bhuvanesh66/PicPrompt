@@ -25,5 +25,10 @@ body {
 }
 
 .placeholder-color {
-  @apply text-gray-400 dark:text-gray-500 font-light;
+  color: #9ca3af; /* tailwind gray-400 approximate */
+  font-weight: 300;
+}
+
+.dark .placeholder-color {
+  color: #6b7280; /* tailwind gray-500 approximate for dark mode */
 }
