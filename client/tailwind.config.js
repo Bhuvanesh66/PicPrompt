@@ -2,10 +2,7 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,css}"],
   darkMode: "class",
-  safelist: [
-    'text-gray-400',
-    'dark:text-gray-500'
-  ],
+  safelist: ["text-gray-400", "dark:text-gray-500"],
   theme: {
     extend: {
       colors: {

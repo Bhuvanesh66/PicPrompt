@@ -27,11 +27,13 @@ const Home = () => {
       }
 
       try {
+        const base =
+          import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
         const [creditsResponse, generationsResponse] = await Promise.all([
-          axios.get("http://localhost:5000/api/v1/user/credits", {
+          axios.get(`${base}/api/v1/user/credits`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("http://localhost:5000/api/v1/images/user-generations", {
+          axios.get(`${base}/api/v1/images/user-generations`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);

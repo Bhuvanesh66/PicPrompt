@@ -16,8 +16,9 @@ const Gallery = () => {
 
   const fetchUserImages = async () => {
     try {
+      const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
       const response = await axios.get(
-        "http://localhost:5000/api/v1/images/user-generations",
+        `${base}/api/v1/images/user-generations`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

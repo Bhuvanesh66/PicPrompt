@@ -22,13 +22,10 @@ const Settings = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.put(
-        "http://localhost:5000/api/v1/user/update",
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const response = await axios.put(`${base}/api/v1/user/update`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.data.success) {
         toast.success("Profile updated successfully!");
         // Refresh the page or update user context
@@ -43,12 +40,10 @@ const Settings = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await axios.delete(
-        "http://localhost:5000/api/v1/user/delete",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const response = await axios.delete(`${base}/api/v1/user/delete`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.data.success) {
         toast.success("Account deleted successfully");
         logout();
