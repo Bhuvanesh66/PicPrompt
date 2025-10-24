@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@reference "tailwindcss";
 
 @layer base {
   :root {
@@ -29,6 +30,6 @@ body {
   font-weight: 300;
 }
 
-.dark .placeholder-color {
-  color: #6b7280; /* tailwind gray-500 approximate for dark mode */
+.placeholder-color {
+  @apply text-gray-400 dark:text-gray-500 font-light;
 }
