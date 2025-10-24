@@ -1,8 +1,9 @@
+
 <div align="center">
 
 <img src="client/public/favicon.svg" alt="Imagify Logo" width="180"/>
 
-# ✨ Imagify - AI Transforming Your Images Magically ✨
+# ✨ PicPrompt - AI Transforming Your Images Magically ✨
 
 > 🎨 Where Creativity Meet Technology
 
@@ -11,196 +12,292 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.0.15-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white&labelColor=20232A)](https://tailwindcss.com/)
 [![Express.js](https://img.shields.io/badge/Express-4.18.0-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 
-[![GitHub stars](https://img.shields.io/github/stars/singh04ayush/imagify?style=social)](https://github.com/singh04ayush/imagify/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/singh04ayush/imagify?style=social)](https://github.com/singh04ayush/imagify/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/singh04ayush/imagify?style=social)](https://github.com/singh04ayush/imagify/issues)
 
 ---
 
 </div>
 
-## ✨ Features
 
-- 🚀 **Fast Processing**: Optimized for performance
-- 📱 **Responsive Design**: Works on all devices
-- 🔒 **Secure Processing**: Your images stay private
-- 💡 **AI**: AI-powered Images
+# PicPrompt — AI Image Generation Platform
 
-## 🚀 Quick Start
+## Live **In:** [https://picprompt-1.onrender.com/](https://picprompt-1.onrender.com/)
 
-<div align="left">
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Demo & Deployment](#demo--deployment)
+- [Folder Structure](#folder-structure)
+- [Getting Started](#getting-started)
+  - [1. Prerequisites](#1-prerequisites)
+  - [2. Backend Setup](#2-backend-setup)
+  - [3. Frontend Setup](#3-frontend-setup)
+- [Configuration](#configuration)
+- [API Overview](#api-overview)
+- [Usage Guide](#usage-guide)
+- [Build & Deployment](#build--deployment)
+- [Common Issues & Solutions](#common-issues--solutions)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact & Support](#contact--support)
 
-### Prerequisites
+***
 
-- Node.js (v18 or higher)
-- npm (v9 or higher)
-- Git
+## Overview
 
-</div>
+**PicPrompt** is an open-source, full-stack AI-powered platform allowing users to instantly generate high-quality images from text prompts using the latest AI models (e.g., ClipDrop API). Built on the MERN stack, PicPrompt supports user registration, authentication, credit tracking, an image gallery with search, and profile management — all wrapped in a performant, responsive, and modern interface.
 
-### 1. Clone the Repository
+***
 
-```bash
-git clone https://github.com/singh04ayush/imagify.git
-cd imagify
+## Tech Stack
+
+| Layer      | Technology                                      |
+|------------|-------------------------------------------------|
+| Frontend   | React.js, Vite, TailwindCSS                     |
+| Backend    | Node.js, Express.js                             |
+| Database   | MongoDB (Atlas or local)                        |
+| Auth       | JWT (JSON Web Tokens)                           |
+| Image AI   | ClipDrop API                                    |
+| Styling    | TailwindCSS, custom CSS, Outfit font (Google)   |
+| Deployment | Render (frontend and backend), Vercel/Netlify-ready |
+
+***
+
+## Features
+
+- 🔐 **User authentication** — JWT-based, secure signup/login.
+- 🎨 **AI text-to-image** — Generate images from text prompts (ClipDrop).
+- 👤 **Profile management** — Update info, delete account, manage credits.
+- 📊 **Credits** — Track usage/limits for AI generations.
+- 🖼️ **Image gallery** — Stores generated images with metadata.
+- 🔎 **Search & filter** — Find images by prompt, date, or tags.
+- 💻 **Responsive design** — Works on mobile, tablet, desktop.
+- ⚡ **Fast setup** — Vite-powered frontend and hot reload dev experience.
+- 🔒 **Secure** — API key, secrets, and image data handled privately.
+
+***
+
+## Demo & Deployment
+
+- **Frontend:** [https://picprompt-1.onrender.com/](https://picprompt-1.onrender.com/)
+- **Backend API:** [https://picprompt-rvgy.onrender.com/](https://picprompt-rvgy.onrender.com/)
+
+***
+
+## Folder Structure
+
 ```
+PicPrompt/
+│
+├── client/           # Frontend (React + Vite)
+│   ├── public/       # Static assets (favicon, meta, index.html)
+│   ├── src/
+│   │   ├── assets/   # SVGs, images, icons
+│   │   ├── components/ # Shared UI components
+│   │   ├── context/  # React context (auth, state)
+│   │   ├── pages/    # Main route pages
+│   │   ├── index.css # Main CSS (Tailwind + custom)
+│   │   └── main.jsx  # Entrypoint
+│   ├── .env          # Frontend env (not committed)
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   └── package.json
+│
+├── server/           # Backend (Express API)
+│   ├── config/       # DB config (mongodb.js)
+│   ├── controllers/  # Route controllers
+│   ├── middlewares/  # JWT auth, error handling
+│   ├── models/       # Mongoose models (User, Image)
+│   ├── routes/       # API routes
+│   ├── .env          # Backend env (not committed)
+│   ├── server.js
+│   └── package.json
+│
+├── README.md
+├── package.json      # Root (optional for monorepo tools)
+└── ...               # Other project files
+```
+
+***
+
+## Getting Started
+
+### 1. Prerequisites
+
+- Node.js v18+ and npm v9+ installed
+- Git
+- MongoDB URI (Atlas recommended)  
+- ClipDrop API key ([get free trial or paid key](https://clipdrop.co/apis/))
+- Render or choose another deployment platform
+
+***
 
 ### 2. Backend Setup
 
 ```bash
-# Navigate to server directory
+# Open terminal
 cd server
-
-# Install dependencies
 npm install
 
-# Create .env file in the server directory
+# Create .env (see template below)
 touch .env
 
-# Add the following environment variables to .env:
+# Add your environment variables:
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-CLIPDROP_API=your_clipdrop_api_key
+MONGODB_URI=your-mongodb-connection-string
+JWT_SECRET=your-very-strong-secret
+CLIPDROP_API=your-clipdrop-api-key
 
-# Start the server
+# Start backend (dev)
 npm run server
 ```
 
-#### Backend Environment Variables Explanation
-
-| Variable       | Description                           | Example                                                       |
-| -------------- | ------------------------------------- | ------------------------------------------------------------- |
-| `PORT`         | Server port number                    | `5000`                                                        |
-| `MONGODB_URI`  | MongoDB connection string             | `mongodb+srv://username:password@cluster.mongodb.net/imagify` |
-| `JWT_SECRET`   | Secret key for JWT authentication     | `your-secret-key-here`                                        |
-| `CLIPDROP_API` | API key for ClipDrop image generation | `your-clipdrop-api-key`                                       |
+***
 
 ### 3. Frontend Setup
 
 ```bash
-# Open a new terminal
-# Navigate to client directory
+# Open another terminal
 cd client
-
-# Install dependencies
 npm install
 
-# If vite not installed
-npm install vite@latest
-
-# Create .env file in the client directory
+# Create .env
 touch .env
 
-# Add the following environment variable to .env:
-VITE_BACKEND_URL=https://picprompt-rvgy.onrender.com
+# Add variable (for local dev)
+VITE_BACKEND_URL=http://localhost:5000
 
-# Start the development server
+# For production, set to your Render backend URL:
+# VITE_BACKEND_URL=https://picprompt-rvgy.onrender.com
+
+# Run dev server
 npm run dev
 ```
 
-#### Frontend Environment Variables Explanation
+***
 
-| Variable           | Description     | Example                               |
-| ------------------ | --------------- | ------------------------------------- |
-| `VITE_BACKEND_URL` | Backend API URL | `https://picprompt-rvgy.onrender.com` |
+## Configuration
 
-### 4. Access the Application
+### Backend `.env` example
 
-- Frontend: `http://localhost:5173`
-- Backend API: `https://picprompt-rvgy.onrender.com`
+```
+PORT=5000
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/PicPrompt
+JWT_SECRET=your-very-secure-secret
+CLIPDROP_API=your-clipdrop-api-key
+```
 
-> **Important Notes**:
->
-> - Never commit your `.env` files to version control
-> - Make sure to replace the example values with your actual configuration
-> - The CLIPDROP_API key can be obtained from [ClipDrop API](https://clipdrop.co/apis)
-> - Keep your JWT_SECRET secure and use a strong random string
+### Frontend `.env` example
 
-<div align="center">
+```
+VITE_BACKEND_URL=https://picprompt-rvgy.onrender.com
+```
 
-### Development Scripts
+***
 
-| Command          | Description     |
-| ---------------- | --------------- |
-| `npm run server` | Starts backend  |
-| `npm run dev`    | Starts frontend |
+## API Overview
 
-### Environment Variables
+| Endpoint                    | Method | Description                      | Auth Required |
+|-----------------------------|--------|----------------------------------|--------------|
+| `/api/v1/auth/register`     | POST   | Register a new user              | No           |
+| `/api/v1/auth/login`        | POST   | Login, returns JWT               | No           |
+| `/api/v1/image/generate`    | POST   | Generate image from prompt       | Yes          |
+| `/api/v1/image/user`        | GET    | Get user’s generated images      | Yes          |
+| `/api/v1/image/:id`         | GET    | Get one image by generationId    | Yes          |
+| `/api/v1/user/:id`          | PATCH  | Update user settings/profile     | Yes          |
 
-| Variable      | Description               | Default |
-| ------------- | ------------------------- | ------- |
-| `PORT`        | Server port               | 5000    |
-| `MONGODB_URI` | MongoDB connection string | -       |
-| `JWT_SECRET`  | JWT secret key            | -       |
+_All API requests (except login/register) require Authorization header:_
 
-</div>
+```
+Authorization: Bearer <token>
+```
 
-## 🛠️ Tech Stack
+***
 
-<div align="center">
+## Usage Guide
 
-### Frontend
+1. **Register**
+   - Go to the site, click Sign Up, fill your details.
+2. **Login**
+   - Enter email and password, receive JWT token, begin session.
+3. **Generate Images**
+   - Enter a prompt (e.g. "a cat surfing on a skateboard"), click "Generate".
+   - AI returns your image, view in gallery, download or share.
+4. **Manage Images**
+   - See all your generations, search, filter, delete if needed.
+5. **Credits**
+   - Each generation uses credits. Buy more/earn/refill as per app logic.
+6. **Settings**
+   - Update profile or change password, delete account if desired.
 
-![React](https://img.shields.io/badge/React-19.0.0-61DAFB?style=flat-square&logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6.2.0-646CFF?style=flat-square&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.0.15-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
+***
 
-### Backend
+## Build & Deployment
 
-![Node.js](https://img.shields.io/badge/Node.js-20.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
-![Express](https://img.shields.io/badge/Express-4.18.0-000000?style=flat-square&logo=express&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-6.0.0-47A248?style=flat-square&logo=mongodb&logoColor=white)
+### Building for Production
 
-</div>
+```bash
+cd client
+npm run build
+# Static assets will be in client/dist
+```
 
-## 🤝 Contributing
+### Render Deployment
 
-<div align="center">
+- **Frontend:**
+  - Root Directory: `client`
+  - Build Command: `npm install && npm run build`
+  - Publish Directory: `dist`
+  - Env: `VITE_BACKEND_URL=https://picprompt-rvgy.onrender.com`
+- **Backend:**  
+  - Root Directory: `server`
+  - Start command: `npm run server`
+  - Add all backend `.env` vars under "Environment"
 
-We welcome contributions! Here's how you can help:
+### Netlify/Vercel
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+- Set base/root: `client`
+- Build command: `npm run build`
+- Publish/output: `dist`
+- Env: set `VITE_BACKEND_URL` to deployed backend url
 
-</div>
+***
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## Common Issues & Solutions
 
-## 📝 License
+- **Tailwind build error:**
+  - Ensure Tailwind `content` in tailwind.config.js covers all source files.
+  - Place all custom styles inside `@layer base` (do **not** use `@reference` in main CSS).
+- **API key security:**  
+  - Never expose ClipDrop or JWT secrets on frontend or repo.
+- **CORS Issues:**  
+  - Both servers must allow requests to/from each other in dev.
+- **Env variables not read:**  
+  - Double-check `.env` file spelling/location and restart dev server after changes.
 
-<div align="center">
+***
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Contributing
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. Fork the repo, create new feature branch.
+2. Add tests/doc where reasonable.
+3. Open a Pull Request — describe changes and motivation.
+4. Ensure no real secrets in commits.
 
-</div>
+***
 
-## 🙏 Acknowledgment
+## License
 
-<div align="center">
+MIT License — see [LICENSE](LICENSE).
 
-| Resource                                         | Description                 |
-| ------------------------------------------------ | --------------------------- |
-| [Heroicons](https://heroicons.com/)              | Beautiful icons             |
-| [TailwindCSS](https://tailwindcss.com/)          | Utility-first CSS framework |
-| [React Community](https://reactjs.org/community) | Amazing React ecosystem     |
+***
 
-</div>
+## Contact & Support
 
----
+For issues, open a [GitHub issue](https://github.com/singh04ayush/imagify/issues)  
+For deployment help, open an issue or reach out directly via project discussions tab.
 
-<div align="center">
+***
 
-### Contributed with ❤️ by [singh04ayush] & [ phoenixdev100 ]
+Made with ❤️ by Bhuvanesh.
 
-OCT 2025
-
-[![GitHub Follow](https://img.shields.io/github/followers/singh04ayush?style=social)](https://github.com/singh04ayush)
-
-</div>
+***
