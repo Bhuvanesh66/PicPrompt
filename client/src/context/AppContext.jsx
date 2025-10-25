@@ -30,7 +30,7 @@
  */
 
 import React, { createContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { showToast } from "../utils/toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 export const AppContext = createContext();
@@ -57,7 +57,7 @@ const AppContextProvider = (props) => {
   const loadCreditsData = async () => {
     try {
       const { data } = await axios.get(backendUrl + "/api/user/credits", {
-        headers: { token },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (data.success) {
@@ -66,7 +66,7 @@ const AppContextProvider = (props) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      showToast(error.message);
     }
   };
 
@@ -82,15 +82,18 @@ const AppContextProvider = (props) => {
         loadCreditsData();
         return data.resultImage;
       } else {
-        toast.error(data.message);
-        loadCreditsData();
+        // Handle credit check without showing error UI
         if (data.creditBalance === 0) {
-          navigate("/buy");
+          showToast("Not enough credits. Premium features coming soon!");
+          return { success: false };
         }
+        loadCreditsData();
+        return null;
       }
     } catch (error) {
-      console.log("here is error");
-      toast.error(`${error.message} here is error`);
+      console.log("Image generation error:", error);
+      // Don't show error toast, just return null
+      return null;
     }
   };
 
@@ -103,7 +106,7 @@ const AppContextProvider = (props) => {
 
   useEffect(() => {
     if (token) {
-      loadCreditsData();
+      // loadCreditsData();
     }
   }, [token]);
 

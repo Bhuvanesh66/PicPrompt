@@ -88,13 +88,21 @@ const Navbar = () => {
       navigate("/result");
       closeMobileMenu();
     } else {
-      toast.error("You don't have enough credits to create new images.", {
-        position: "bottom-right",
+      toast("You don't have enough credits to create new images.", {
+        style: {
+          background: "#1a1a1a",
+          color: "#fff",
+          borderRadius: "8px",
+          fontSize: "14px",
+          padding: "12px 16px",
+          position: "relative",
+          overflow: "hidden",
+        },
+        className: "toast-with-progress",
+        icon: false,
         autoClose: 3000,
+        progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
         hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       });
     }
   };

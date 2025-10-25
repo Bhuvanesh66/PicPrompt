@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { toast } from "react-toastify";
+import { showToast } from "../utils/toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -27,12 +27,12 @@ const Settings = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.success) {
-        toast.success("Profile updated successfully!");
+        showToast("Profile updated successfully");
         // Refresh the page or update user context
         window.location.reload();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error updating profile");
+      showToast(error.response?.data?.message || "Error updating profile");
     } finally {
       setIsLoading(false);
     }
@@ -45,12 +45,12 @@ const Settings = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.success) {
-        toast.success("Account deleted successfully");
+        showToast("Account deleted successfully");
         logout();
         navigate("/");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error deleting account");
+      showToast(error.response?.data?.message || "Error deleting account");
     }
   };
 
@@ -88,7 +88,7 @@ const Settings = () => {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-black-700 mb-1"
               >
                 Name
               </label>
@@ -98,7 +98,7 @@ const Settings = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-50 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
             </div>

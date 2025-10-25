@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { AppContext } from '../context/AppContext';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const GenerationResult = () => {
   const { id } = useParams();
@@ -15,28 +15,61 @@ const GenerationResult = () => {
   useEffect(() => {
     const fetchGeneration = async () => {
       try {
-        console.log('Fetching generation with ID:', id);
-        const response = await axios.get(`${backendUrl}/api/image/generation/${id}`, {
-          headers: { 
-            token,
-            'Content-Type': 'application/json'
+        console.log("Fetching generation with ID:", id);
+        const response = await axios.get(
+          `${backendUrl}/api/image/generation/${id}`,
+          {
+            headers: {
+              token,
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
 
-        console.log('Server response:', response.data);
+        console.log("Server response:", response.data);
 
         if (response.data.success) {
           setGeneration(response.data.generation);
         } else {
-          console.error('Server returned error:', response.data.message);
-          toast.error(response.data.message || 'Failed to load generation');
-          navigate('/dashboard');
+          console.error("Server returned error:", response.data.message);
+          toast(response.data.message || "Failed to load generation", {
+            style: {
+              background: "#1a1a1a",
+              color: "#fff",
+              borderRadius: "8px",
+              fontSize: "14px",
+              padding: "12px 16px",
+              position: "relative",
+              overflow: "hidden",
+            },
+            className: "toast-with-progress",
+            icon: false,
+            autoClose: 3000,
+            progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+            hideProgressBar: false,
+          });
+          navigate("/dashboard");
         }
       } catch (error) {
-        console.error('Error fetching generation:', error);
-        console.error('Error details:', error.response?.data);
-        toast.error(error.response?.data?.message || 'Failed to load generation');
-        navigate('/dashboard');
+        console.error("Error fetching generation:", error);
+        console.error("Error details:", error.response?.data);
+        toast(error.response?.data?.message || "Failed to load generation", {
+          style: {
+            background: "#1a1a1a",
+            color: "#fff",
+            borderRadius: "8px",
+            fontSize: "14px",
+            padding: "12px 16px",
+            position: "relative",
+            overflow: "hidden",
+          },
+          className: "toast-with-progress",
+          icon: false,
+          autoClose: 3000,
+          progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+          hideProgressBar: false,
+        });
+        navigate("/dashboard");
       } finally {
         setLoading(false);
       }
@@ -45,9 +78,24 @@ const GenerationResult = () => {
     if (id && token) {
       fetchGeneration();
     } else {
-      console.error('Missing id or token:', { id, hasToken: !!token });
-      toast.error('Missing required data to fetch generation');
-      navigate('/dashboard');
+      console.error("Missing id or token:", { id, hasToken: !!token });
+      toast("Missing required data to fetch generation", {
+        style: {
+          background: "#1a1a1a",
+          color: "#fff",
+          borderRadius: "8px",
+          fontSize: "14px",
+          padding: "12px 16px",
+          position: "relative",
+          overflow: "hidden",
+        },
+        className: "toast-with-progress",
+        icon: false,
+        autoClose: 3000,
+        progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+        hideProgressBar: false,
+      });
+      navigate("/dashboard");
     }
   }, [id, token, backendUrl, navigate]);
 
@@ -63,18 +111,23 @@ const GenerationResult = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-red-600 mb-4">Generation Not Found</h2>
+          <h2 className="text-2xl font-semibold text-red-600 mb-4">
+            Generation Not Found
+          </h2>
           <p className="text-gray-600 mb-4">
-            We couldn't find the image generation you're looking for. This could be because:
+            We couldn't find the image generation you're looking for. This could
+            be because:
           </p>
           <ul className="list-disc text-left max-w-md mx-auto mb-6 text-gray-600">
             <li className="mb-2">The generation ID is invalid</li>
             <li className="mb-2">The generation has been deleted</li>
-            <li className="mb-2">You don't have permission to view this generation</li>
+            <li className="mb-2">
+              You don't have permission to view this generation
+            </li>
           </ul>
           <div className="space-y-4">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate("/dashboard")}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 w-full"
             >
               Back to Dashboard
@@ -101,7 +154,9 @@ const GenerationResult = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">Generated Image</h1>
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">
+              Generated Image
+            </h1>
             <p className="text-gray-600">{generation.prompt}</p>
             <p className="text-sm text-gray-500 mt-1">
               Generated on {new Date(generation.createdAt).toLocaleDateString()}
@@ -118,7 +173,7 @@ const GenerationResult = () => {
 
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() => navigate('/result')}
+              onClick={() => navigate("/result")}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Generate New Image
@@ -131,7 +186,7 @@ const GenerationResult = () => {
               Download Image
             </a>
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate("/dashboard")}
               className="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50"
             >
               Back to Dashboard
@@ -143,4 +198,4 @@ const GenerationResult = () => {
   );
 };
 
-export default GenerationResult; 
+export default GenerationResult;

@@ -30,20 +30,25 @@ import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
   try {
-    const { token } = req.headers;
+    const authHeader = req.headers.authorization;
 
     // Only log in non-production environments
     if (process.env.NODE_ENV !== "production") {
-      console.log("Auth middleware: Token received:", !!token);
+      console.log(
+        "Auth middleware: Authorization header received:",
+        !!authHeader
+      );
     }
 
-    if (!token) {
-      console.error("Auth middleware: No token provided");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.error("Auth middleware: No token or invalid format");
       return res.status(401).json({
         success: false,
         message: "Authentication required. Please login.",
       });
     }
+
+    const token = authHeader.split(" ")[1]; // Get the token part after 'Bearer '
     const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
 
     // Only log in non-production environments

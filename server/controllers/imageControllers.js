@@ -1,11 +1,11 @@
 /**
  * Image Generation Controllers
- * 
+ *
  * This module handles all image-related operations including:
  * - AI Image generation using ClipDrop API
  * - User generation history
  * - Individual generation retrieval
- * 
+ *
  * @module controllers/imageControllers
  * @requires axios
  * @requires models/userModel
@@ -20,7 +20,7 @@ import mongoose from "mongoose";
 
 /**
  * Generate AI Image
- * 
+ *
  * @async
  * @param {Object} req - Express request object
  * @param {Object} req.body - Request body
@@ -117,7 +117,6 @@ export const getUserGenerations = async (req, res) => {
     const generations = await imageModel
       .find({ userId })
       .sort({ createdAt: -1 })
-      .limit(10)
       .select("prompt createdAt _id imageUrl");
 
     console.log("Number of generations found:", generations.length);

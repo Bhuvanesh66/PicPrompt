@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { showToast } from "../utils/toast";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -32,7 +32,22 @@ const Login = () => {
           setShowLogin(false);
           navigate("/");
         } else {
-          toast.error(data.message);
+          toast(data.message, {
+            style: {
+              background: "#1a1a1a",
+              color: "#fff",
+              borderRadius: "8px",
+              fontSize: "14px",
+              padding: "12px 16px",
+              position: "relative",
+              overflow: "hidden",
+            },
+            className: "toast-with-progress",
+            icon: false,
+            autoClose: 3000,
+            progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+            hideProgressBar: false,
+          });
         }
       } else {
         const { data } = await axios.post(backendUrl + "/api/user/register", {
@@ -48,7 +63,22 @@ const Login = () => {
           setShowLogin(false);
           navigate("/");
         } else {
-          toast.error(data.message);
+          toast(data.message, {
+            style: {
+              background: "#1a1a1a",
+              color: "#fff",
+              borderRadius: "8px",
+              fontSize: "14px",
+              padding: "12px 16px",
+              position: "relative",
+              overflow: "hidden",
+            },
+            className: "toast-with-progress",
+            icon: false,
+            autoClose: 3000,
+            progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+            hideProgressBar: false,
+          });
         }
       }
     } catch (error) {
@@ -56,12 +86,23 @@ const Login = () => {
       const serverData = error?.response?.data;
       const serverMessage = serverData?.message;
 
-      if (serverData?.type === "info") {
-        // Show info/warning style toast instead of error
-        toast.info(serverMessage || "Info");
-      } else {
-        toast.error(serverMessage || error.message || "An error occurred");
-      }
+      const message = serverMessage || error.message || "An error occurred";
+      toast(message, {
+        style: {
+          background: "#1a1a1a",
+          color: "#fff",
+          borderRadius: "8px",
+          fontSize: "14px",
+          padding: "12px 16px",
+          position: "relative",
+          overflow: "hidden",
+        },
+        className: "toast-with-progress",
+        icon: false,
+        autoClose: 3000,
+        progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+        hideProgressBar: false,
+      });
     }
   };
 

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../context/AppContext';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const { user, token, backendUrl } = useContext(AppContext);
@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     credits: 0,
     imagesGenerated: 0,
-    favoriteStyles: 0
+    favoriteStyles: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,57 +20,101 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       if (!token) {
-        setError('Authentication required. Please login.');
+        setError("Authentication required. Please login.");
         setIsLoading(false);
-        navigate('/');
+        navigate("/");
         return;
       }
 
       try {
-        console.log('Fetching dashboard data with token:', token ? 'Yes' : 'No');
-        
+        console.log(
+          "Fetching dashboard data with token:",
+          token ? "Yes" : "No"
+        );
+
         const [creditsResponse, generationsResponse] = await Promise.all([
           axios.get(`${backendUrl}/api/user/credits`, {
-            headers: { 
+            headers: {
               token,
-              'Content-Type': 'application/json'
-            }
+              "Content-Type": "application/json",
+            },
           }),
           axios.get(`${backendUrl}/api/image/user-generations`, {
-            headers: { 
+            headers: {
               token,
-              'Content-Type': 'application/json'
-            }
-          })
+              "Content-Type": "application/json",
+            },
+          }),
         ]);
 
-        console.log('Credits response:', creditsResponse.data);
-        console.log('Generations response:', generationsResponse.data);
+        console.log("Credits response:", creditsResponse.data);
+        console.log("Generations response:", generationsResponse.data);
 
         if (creditsResponse.data.success && generationsResponse.data.success) {
           setStats({
             credits: creditsResponse.data.credits || 0,
             imagesGenerated: generationsResponse.data.totalGenerations || 0,
-            favoriteStyles: generationsResponse.data.uniqueStyles || 0
+            favoriteStyles: generationsResponse.data.uniqueStyles || 0,
           });
           setError(null);
         } else {
-          const errorMessage = creditsResponse.data.message || generationsResponse.data.message || 'Failed to fetch dashboard data';
-          console.error('Dashboard data error:', errorMessage);
+          const errorMessage =
+            creditsResponse.data.message ||
+            generationsResponse.data.message ||
+            "Failed to fetch dashboard data";
+          console.error("Dashboard data error:", errorMessage);
           setError(errorMessage);
-          if (errorMessage.includes('Authentication') || errorMessage.includes('login')) {
-            navigate('/');
+          if (
+            errorMessage.includes("Authentication") ||
+            errorMessage.includes("login")
+          ) {
+            navigate("/");
           }
-          toast.error(errorMessage);
+          toast(errorMessage, {
+            style: {
+              background: "#1a1a1a",
+              color: "#fff",
+              borderRadius: "8px",
+              fontSize: "14px",
+              padding: "12px 16px",
+              position: "relative",
+              overflow: "hidden",
+            },
+            className: "toast-with-progress",
+            icon: false,
+            autoClose: 3000,
+            progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+            hideProgressBar: false,
+          });
         }
       } catch (error) {
-        console.error('Dashboard data fetch error:', error);
-        const errorMessage = error.response?.data?.message || 'Failed to load dashboard data';
+        console.error("Dashboard data fetch error:", error);
+        const errorMessage =
+          error.response?.data?.message || "Failed to load dashboard data";
         setError(errorMessage);
-        if (error.response?.status === 401 || errorMessage.includes('Authentication') || errorMessage.includes('login')) {
-          navigate('/');
+        if (
+          error.response?.status === 401 ||
+          errorMessage.includes("Authentication") ||
+          errorMessage.includes("login")
+        ) {
+          navigate("/");
         }
-        toast.error(errorMessage);
+        toast(errorMessage, {
+          style: {
+            background: "#1a1a1a",
+            color: "#fff",
+            borderRadius: "8px",
+            fontSize: "14px",
+            padding: "12px 16px",
+            position: "relative",
+            overflow: "hidden",
+          },
+          className: "toast-with-progress",
+          icon: false,
+          autoClose: 3000,
+          progressStyle: { background: "rgba(255, 255, 255, 0.7)" },
+          hideProgressBar: false,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -80,7 +124,7 @@ const Dashboard = () => {
   }, [token, backendUrl, navigate]);
 
   const handleGenerateClick = () => {
-    navigate('/result');
+    navigate("/result");
   };
 
   if (isLoading) {
@@ -95,7 +139,9 @@ const Dashboard = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-red-600 mb-4">Error Loading Dashboard</h2>
+          <h2 className="text-2xl font-semibold text-red-600 mb-4">
+            Error Loading Dashboard
+          </h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -114,18 +160,18 @@ const Dashboard = () => {
         {/* Welcome Section with Quick Stats */}
         <div className="bg-gradient-to-r from-teal-500 to-orange-500 rounded-xl shadow-sm p-8 text-white mb-8 relative overflow-hidden">
           {/* Animated background elements */}
-          <motion.div 
+          <motion.div
             className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"
             animate={{
-              x: ['-100%', '100%'],
+              x: ["-100%", "100%"],
             }}
             transition={{
               duration: 3,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
           />
-          
+
           <h1 className="text-3xl font-bold mb-4 relative">
             <motion.span
               className="inline-block cursor-default relative bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-transparent bg-clip-text"
@@ -144,29 +190,31 @@ const Dashboard = () => {
                 backgroundPosition: {
                   duration: 3,
                   repeat: Infinity,
-                  ease: "linear"
-                }
+                  ease: "linear",
+                },
               }}
             >
               Welcome back,
-            </motion.span>{' '}
+            </motion.span>{" "}
             <motion.span
               className="inline-block cursor-pointer relative text-white font-bold"
               whileHover={{
                 scale: 1.05,
                 textShadow: "0 0 12px rgba(255,255,255,0.5)",
                 transition: {
-                  duration: 0.2
-                }
+                  duration: 0.2,
+                },
               }}
             >
               <span className="relative">
-                <span className="relative z-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text"
+                <span
+                  className="relative z-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text"
                   style={{
-                    WebkitTextFillColor: 'transparent',
-                    backgroundSize: '200% 100%',
-                    animation: 'gradient 3s linear infinite'
-                  }}>
+                    WebkitTextFillColor: "transparent",
+                    backgroundSize: "200% 100%",
+                    animation: "gradient 3s linear infinite",
+                  }}
+                >
                   {user?.name}
                 </span>
                 <motion.div
@@ -177,7 +225,7 @@ const Dashboard = () => {
                 />
               </span>
             </motion.span>
-            !{' '}
+            !{" "}
             <motion.span
               animate={{
                 rotate: [0, -10, 10, -10, 0],
@@ -185,14 +233,14 @@ const Dashboard = () => {
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                repeatType: "reverse"
+                repeatType: "reverse",
               }}
             >
               👋
             </motion.span>
           </h1>
-          
-          <motion.p 
+
+          <motion.p
             className="text-lg opacity-90 mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -200,27 +248,36 @@ const Dashboard = () => {
           >
             Your creative journey continues...
           </motion.p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div 
+            <motion.div
               className="bg-white/10 rounded-lg p-4 backdrop-blur-sm"
-              whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.15)' }}
+              whileHover={{
+                scale: 1.02,
+                backgroundColor: "rgba(255,255,255,0.15)",
+              }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >
               <p className="text-sm opacity-75">Available Credits</p>
               <p className="text-3xl font-bold">{stats.credits}</p>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="bg-white/10 rounded-lg p-4 backdrop-blur-sm"
-              whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.15)' }}
+              whileHover={{
+                scale: 1.02,
+                backgroundColor: "rgba(255,255,255,0.15)",
+              }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >
               <p className="text-sm opacity-75">Images Created</p>
               <p className="text-3xl font-bold">{stats.imagesGenerated}</p>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="bg-white/10 rounded-lg p-4 backdrop-blur-sm"
-              whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.15)' }}
+              whileHover={{
+                scale: 1.02,
+                backgroundColor: "rgba(255,255,255,0.15)",
+              }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >
               <p className="text-sm opacity-75">Styles Used</p>
@@ -231,7 +288,7 @@ const Dashboard = () => {
 
         {/* Quick Actions Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <button 
+          <button
             onClick={handleGenerateClick}
             className="bg-teal-500 text-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:scale-105"
           >
@@ -239,24 +296,24 @@ const Dashboard = () => {
             <h3 className="font-semibold">New Creation</h3>
             <p className="text-sm opacity-90 mt-1">Start generating</p>
           </button>
-          <Link 
-            to="/gallery" 
+          <Link
+            to="/gallery"
             className="bg-orange-500 text-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:scale-105"
           >
             <div className="text-2xl mb-2">🖼️</div>
             <h3 className="font-semibold">Gallery</h3>
             <p className="text-sm opacity-90 mt-1">View your work</p>
           </Link>
-          <Link 
-            to="/buy" 
+          <Link
+            to="/buy"
             className="bg-purple-500 text-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:scale-105"
           >
             <div className="text-2xl mb-2">⭐</div>
             <h3 className="font-semibold">Get Credits</h3>
             <p className="text-sm opacity-90 mt-1">Power up</p>
           </Link>
-          <Link 
-            to="/features" 
+          <Link
+            to="/features"
             className="bg-blue-500 text-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all hover:scale-105"
           >
             <div className="text-2xl mb-2">✨</div>
@@ -267,34 +324,49 @@ const Dashboard = () => {
 
         {/* AI Tips & Inspiration */}
         <div className="bg-gradient-to-br from-white to-teal-50 rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">AI Tips & Inspiration</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+            AI Tips & Inspiration
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="text-teal-600 text-lg mb-3">✨ Prompt Engineering</div>
-              <p className="text-gray-600 mb-3">Be specific with details like style, mood, lighting, and perspective for better results.</p>
-              <button 
+              <div className="text-teal-600 text-lg mb-3">
+                ✨ Prompt Engineering
+              </div>
+              <p className="text-gray-600 mb-3">
+                Be specific with details like style, mood, lighting, and
+                perspective for better results.
+              </p>
+              <button
                 onClick={handleGenerateClick}
                 className="text-teal-600 hover:text-teal-700 text-sm font-medium"
               >
                 Try Now →
               </button>
             </div>
-            
+
             <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="text-orange-500 text-lg mb-3">🎨 Style Mixing</div>
-              <p className="text-gray-600 mb-3">Combine different art styles like "watercolor meets cyberpunk" for unique creations.</p>
-              <button 
+              <div className="text-orange-500 text-lg mb-3">
+                🎨 Style Mixing
+              </div>
+              <p className="text-gray-600 mb-3">
+                Combine different art styles like "watercolor meets cyberpunk"
+                for unique creations.
+              </p>
+              <button
                 onClick={handleGenerateClick}
                 className="text-orange-500 hover:text-orange-600 text-sm font-medium"
               >
                 Try Now →
               </button>
             </div>
-            
+
             <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
               <div className="text-purple-600 text-lg mb-3">🌟 Pro Tips</div>
-              <p className="text-gray-600 mb-3">Use descriptive adjectives and reference specific artists or time periods for inspiration.</p>
-              <button 
+              <p className="text-gray-600 mb-3">
+                Use descriptive adjectives and reference specific artists or
+                time periods for inspiration.
+              </p>
+              <button
                 onClick={handleGenerateClick}
                 className="text-purple-600 hover:text-purple-700 text-sm font-medium"
               >
@@ -307,54 +379,85 @@ const Dashboard = () => {
         {/* Resources & Help */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Quick Tutorial</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Quick Tutorial
+            </h3>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 flex-shrink-0">1</div>
+                <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 flex-shrink-0">
+                  1
+                </div>
                 <div>
                   <p className="font-medium text-gray-800">Choose Your Style</p>
-                  <p className="text-gray-600 text-sm">Browse through our collection of AI art styles</p>
+                  <p className="text-gray-600 text-sm">
+                    Browse through our collection of AI art styles
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 flex-shrink-0">2</div>
+                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 flex-shrink-0">
+                  2
+                </div>
                 <div>
                   <p className="font-medium text-gray-800">Write Your Prompt</p>
-                  <p className="text-gray-600 text-sm">Describe what you want to create in detail</p>
+                  <p className="text-gray-600 text-sm">
+                    Describe what you want to create in detail
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0">3</div>
+                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 flex-shrink-0">
+                  3
+                </div>
                 <div>
                   <p className="font-medium text-gray-800">Generate & Share</p>
-                  <p className="text-gray-600 text-sm">Create your image and share it with the world</p>
+                  <p className="text-gray-600 text-sm">
+                    Create your image and share it with the world
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Need Help?</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Need Help?
+            </h3>
             <div className="space-y-4">
-              <Link to="/features" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50">
+              <Link
+                to="/features"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50"
+              >
                 <div className="text-2xl">📚</div>
                 <div>
                   <p className="font-medium text-gray-800">Documentation</p>
-                  <p className="text-gray-600 text-sm">Learn about all features</p>
+                  <p className="text-gray-600 text-sm">
+                    Learn about all features
+                  </p>
                 </div>
               </Link>
-              <a href="#support" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50">
+              <a
+                href="#support"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50"
+              >
                 <div className="text-2xl">💬</div>
                 <div>
                   <p className="font-medium text-gray-800">Support</p>
-                  <p className="text-gray-600 text-sm">Get help when you need it</p>
+                  <p className="text-gray-600 text-sm">
+                    Get help when you need it
+                  </p>
                 </div>
               </a>
-              <Link to="/buy" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50">
+              <Link
+                to="/buy"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50"
+              >
                 <div className="text-2xl">⭐</div>
                 <div>
                   <p className="font-medium text-gray-800">Premium Features</p>
-                  <p className="text-gray-600 text-sm">Unlock more possibilities</p>
+                  <p className="text-gray-600 text-sm">
+                    Unlock more possibilities
+                  </p>
                 </div>
               </Link>
             </div>
@@ -364,12 +467,16 @@ const Dashboard = () => {
 
       <style jsx>{`
         @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 200% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
         }
       `}</style>
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

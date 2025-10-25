@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import { showToast } from "../utils/toast";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -29,26 +30,32 @@ const Gallery = () => {
   const { token } = useContext(AppContext);
 
   useEffect(() => {
-    fetchUserImages();
-  }, []);
+    if (token) {
+      fetchUserImages();
+    }
+  }, [token]);
 
   const fetchUserImages = async () => {
     try {
-      const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-      const response = await axios.get(
-        `${base}/api/v1/images/user-generations`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      setLoading(true);
+      const base = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+      const response = await axios.get(`${base}/api/image/user-generations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data.success && response.data.recentGenerations) {
         setImages(response.data.recentGenerations);
+      } else {
+        console.warn("No images found in response:", response.data);
       }
-      setLoading(false);
     } catch (error) {
+      // Log full error for debugging, but show users a friendly non-technical message
       console.error("Error fetching images:", error);
+      showToast(
+        "It may take a moment to load your images — if they're not visible now, please try again in a few minutes."
+      );
+    } finally {
       setLoading(false);
     }
   };
@@ -84,7 +91,9 @@ const Gallery = () => {
       </div>
 
       {loading ? (
-        <div className="text-center">Loading...</div>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
       ) : filteredImages.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredImages.map((image, index) => (

@@ -1,18 +1,20 @@
 /**
  * Main Application Component
- * 
+ *
  * This is the root component of the Imagify application. It handles:
  * - Route configuration and protected routes
  * - Global layout structure (Navbar, Content, Footer)
  * - Authentication state management
  * - Theme configuration
- * 
+ *
  * @component
  */
 
 import React, { useContext, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./styles/toast.css";
 
 import Home from "./pages/Home";
 import Result from "./pages/Result";
@@ -38,7 +40,20 @@ const App = () => {
     <>
       {showLogin && <Login />}
       <div className="px-4 sm:px-10 md:px-14 lg:px-28 min-h-screen bg-gradient-to-b from-teal-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-200">
-        <ToastContainer position="bottom-right" />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable={false}
+          pauseOnHover={false}
+          closeButton={false}
+          icon={false}
+          theme="dark"
+        />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
